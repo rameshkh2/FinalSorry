@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Junkiri ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper: #f3e8d6;
+    --paper-deep: #e8d7b8;
+    --paper-line: rgba(90, 66, 40, .18);
+    --ink: #2b2119;
+    --ink-soft: #5b4636;
+    --maroon: #7a2333;
+    --maroon-deep: #591826;
+    --gold: #b4893f;
+    --rose: #c9818a;
+    --thread: #8b6f47;
+    --shadow: 0 18px 40px rgba(43, 25, 20, .18);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top, rgba(180,137,63,.08), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* subtle paper grain */
+  body::before{
+    content:"";
+    position: fixed;
+    inset:0;
+    pointer-events:none;
+    z-index: 0;
+    opacity:.5;
+    background-image:
+      radial-gradient(rgba(90,66,40,.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+
+  h1,h2,h3{
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--maroon-deep);
+    margin: 0 0 .3em;
+    letter-spacing: .01em;
+  }
+
+  .script{
+    font-family: 'Great Vibes', cursive;
+    color: var(--maroon);
+    font-weight: 400;
+  }
+
+  a{ color: inherit; text-decoration:none; }
+
+  ::selection{ background: var(--rose); color: #fff; }
+
+  :focus-visible{
+    outline: 2px solid var(--maroon);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- floating petals ---------- */
+  #petal-field{
+    position: fixed;
+    inset:0;
+    pointer-events:none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-5%;
+    font-size: 1.1rem;
+    opacity:.65;
+    color: var(--maroon);
+    animation: drift linear infinite;
+    will-change: transform;
+  }
+  @keyframes drift{
+    0%{ transform: translateY(-10vh) translateX(0) rotate(0deg); }
+    100%{ transform: translateY(110vh) translateX(var(--drift, 40px)) rotate(360deg); }
+  }
+
+  /* ---------- torn paper divider ---------- */
+  .torn{
+    position: relative;
+    height: 42px;
+    width: 100%;
+    z-index: 2;
+    background: var(--paper);
+    clip-path: polygon(
+      0% 100%, 3% 40%, 7% 90%, 12% 30%, 17% 80%, 22% 20%, 27% 70%,
+      32% 10%, 38% 60%, 43% 15%, 48% 75%, 53% 25%, 58% 65%, 63% 5%,
+      68% 55%, 73% 20%, 78% 70%, 83% 15%, 88% 60%, 93% 25%, 97% 80%, 100% 100%
+    );
+  }
+  .torn.flip{ transform: scaleY(-1); }
+
+  section{
+    position: relative;
+    z-index: 2;
+    padding: 90px 8vw 70px;
+  }
+
+  /* ---------- header / nav ---------- */
+  header{
+    position: sticky;
+    top:0;
+    z-index: 50;
+    background: rgba(243,232,214,.9);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 14px 6vw;
+    gap: 16px;
+  }
+  .logo{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.3rem;
+    color: var(--maroon-deep);
+  }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap: clamp(10px, 2vw, 26px);
+    margin:0; padding:0;
+    flex-wrap: wrap;
+  }
+  nav ul li a{
+    font-size:.85rem;
+    letter-spacing:.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 6px 2px;
+    border-bottom: 1px solid transparent;
+    transition: color .25s, border-color .25s;
+  }
+  nav ul li a:hover{ color: var(--maroon); border-color: var(--maroon); }
+
+  .nav-toggle{
+    display:none;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--paper-line);
+    background: var(--paper-deep);
+    cursor: pointer;
+    flex-shrink:0;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:4px;
+  }
+  .nav-toggle span{
+    display:block;
+    width: 16px; height: 2px;
+    background: var(--maroon-deep);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .nav-toggle.open span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+  .nav-right{ display:flex; align-items:center; gap: 12px; }
+
+  .music-btn{
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display:grid; place-items:center;
+    background: var(--maroon);
+    color: var(--paper);
+    cursor:pointer;
+    font-size: .95rem;
+    box-shadow: var(--shadow);
+    transition: transform .2s;
+    flex-shrink:0;
+  }
+  .music-btn:hover{ transform: scale(1.08); }
+  .music-btn.paused{ filter: grayscale(.5); opacity:.7; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height: 92vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding-top: 40px;
+  }
+  .hero-content{ max-width: 640px; }
+  .hero-content h3.script{ font-size: 1.9rem; margin-bottom:.1em; }
+  .hero-content h1{
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .hero-content p{
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    margin: 22px auto 34px;
+    max-width: 480px;
+  }
+
+  /* wax seal button — the signature element */
+  .seal{
+    --size: 108px;
+    width: var(--size); height: var(--size);
+    margin: 0 auto;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9c3247, var(--maroon) 55%, var(--maroon-deep) 100%);
+    color: var(--paper);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    display:grid; place-items:center;
+    box-shadow: 0 10px 24px rgba(89,24,38,.45), inset 0 0 0 3px rgba(243,232,214,.25);
+    position: relative;
+    transition: transform .35s ease;
+  }
+  .seal::before{
+    content:"❦";
+    position:absolute;
+    font-size: 1.6rem;
+    top: 20%;
+  }
+  .seal span{ margin-top: 30px; letter-spacing:.05em; }
+  .seal:hover{ transform: scale(1.05) rotate(-3deg); }
+  .seal.crack{ animation: crack .5s forwards; }
+  @keyframes crack{
+    0%{ transform: scale(1); }
+    40%{ transform: scale(1.15) rotate(4deg); }
+    100%{ transform: scale(0) rotate(25deg); opacity:0; }
+  }
+
+  /* ---------- letter ---------- */
+  .letter{ text-align:center; }
+  .letter-box{
+    max-width: 620px;
+    margin: 30px auto 0;
+    background: var(--paper-deep);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 50px 44px;
+    box-shadow: var(--shadow);
+    position: relative;
+    text-align:left;
+  }
+  .letter-box::before{
+    content:"";
+    position:absolute;
+    inset: 12px;
+    border: 1px solid rgba(180,137,63,.35);
+    pointer-events:none;
+  }
+  #typingText{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    line-height: 2;
+    color: var(--ink);
+    min-height: 260px;
+    white-space: pre-wrap;
+  }
+  .cursor{
+    display:inline-block;
+    width: 2px; height: 1.1em;
+    background: var(--maroon);
+    vertical-align: -.15em;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+  .signature-line{
+    margin-top: 26px;
+    font-family:'Great Vibes', cursive;
+    font-size: 1.6rem;
+    color: var(--maroon);
+    text-align: right;
+  }
+
+  /* ---------- gallery / slider ---------- */
+  .gallery{ text-align:center; }
+  .slider{
+    max-width: 560px;
+    margin: 34px auto 0;
+    display:flex;
+    align-items:center;
+    gap: 18px;
+    justify-content:center;
+  }
+  .slides{
+    position: relative;
+    width: 340px;
+    height: 260px;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    background: var(--paper-deep);
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+    opacity:0;
+    transform: rotate(-3deg) scale(.96);
+    transition: opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+  }
+  .slide.active{
+    opacity:1;
+    transform: rotate(0) scale(1);
+    pointer-events:auto;
+  }
+  .slide span{ font-size: 2.4rem; margin-bottom: 10px; }
+  .slide p{ color: var(--ink-soft); line-height:1.7; font-size:.98rem; }
+  .slider button{
+    width: 42px; height:42px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    background: var(--paper);
+    color: var(--maroon-deep);
+    font-size: 1.1rem;
+    cursor:pointer;
+    flex-shrink:0;
+    transition: background .2s, color .2s;
+  }
+  .slider button:hover{ background: var(--maroon); color: var(--paper); }
+  .dots{
+    display:flex; gap:8px; justify-content:center; margin-top:18px;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background: var(--paper-line);
+    cursor:pointer;
+  }
+  .dot.active{ background: var(--maroon); }
+
+  /* ---------- reasons cards ---------- */
+  .reasons{ text-align:center; }
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 22px;
+    max-width: 900px;
+    margin: 34px auto 0;
+  }
+  .card{
+    background: var(--paper-deep);
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    padding: 26px 20px;
+    text-align:left;
+    box-shadow: var(--shadow);
+    transition: transform .3s ease;
+  }
+  .card:hover{ transform: translateY(-6px); }
+  .card h3{ font-size: 1.15rem; }
+  .card p{ color: var(--ink-soft); font-size:.92rem; line-height:1.65; margin:0; }
+
+  /* ---------- timeline ---------- */
+  .timeline{ text-align:center; }
+  .timeline-box{
+    max-width: 560px;
+    margin: 40px auto 0;
+    position: relative;
+    text-align:left;
+    padding-left: 30px;
+    border-left: 1px dashed var(--thread);
+  }
+  .event{ position:relative; padding: 0 0 40px 24px; }
+  .event:last-child{ padding-bottom:0; }
+  .event::before{
+    content:"❧";
+    position:absolute;
+    left: -42px; top: -2px;
+    color: var(--gold);
+    background: var(--paper);
+    font-size: 1rem;
+    width: 22px; text-align:center;
+  }
+  .event .chapter{
+    display:block;
+    font-family:'Great Vibes', cursive;
+    color: var(--maroon);
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+  .event h3{ font-size: 1.2rem; }
+  .event p{ color: var(--ink-soft); line-height:1.7; margin:0; font-size:.95rem; }
+
+  /* ---------- gift ---------- */
+  .gift{ text-align:center; }
+  .gift-box{
+    width: 130px; height: 130px;
+    margin: 30px auto 0;
+    border-radius: 10px;
+    background: linear-gradient(160deg, var(--maroon), var(--maroon-deep));
+    color: var(--paper);
+    font-size: 2.6rem;
+    display:grid; place-items:center;
+    cursor:pointer;
+    box-shadow: var(--shadow);
+    border: none;
+    transition: transform .3s;
+    animation: sway 3.5s ease-in-out infinite;
+  }
+  .gift-box:hover{ transform: scale(1.06); }
+  @keyframes sway{
+    0%,100%{ transform: rotate(-2deg); }
+    50%{ transform: rotate(2deg); }
+  }
+  #giftMessage{
+    max-width: 460px;
+    margin: 22px auto 0;
+    color: var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    line-height:1.8;
+    min-height: 2.4em;
+  }
+
+  /* ---------- forgive ---------- */
+  .forgive{ text-align:center; }
+  .buttons{
+    display:flex; gap:20px; justify-content:center; margin-top: 30px; flex-wrap:wrap;
+  }
+  .buttons button{
+    padding: 14px 30px;
+    border-radius: 30px;
+    border: none;
+    font-family:'Poppins', sans-serif;
+    font-size: .95rem;
+    letter-spacing:.03em;
+    cursor:pointer;
+    box-shadow: var(--shadow);
+    transition: transform .2s;
+  }
+  .buttons button:hover{ transform: translateY(-3px); }
+  #forgiveBtn{ background: var(--maroon); color: var(--paper); }
+  #escapeBtn{ background: var(--paper-deep); color: var(--ink-soft); border: 1px solid var(--paper-line); position:relative; }
+  #result{
+    margin-top: 26px;
+    font-family:'Great Vibes', cursive;
+    font-size: 1.7rem;
+    color: var(--maroon);
+    min-height: 1.6em;
+  }
+
+  /* ---------- ending ---------- */
+  .ending{
+    text-align:center;
+    background: var(--maroon-deep);
+    color: var(--paper);
+  }
+  .ending h2{ color: var(--paper); font-style: italic; }
+  .ending p{
+    max-width: 480px;
+    margin: 20px auto 0;
+    line-height: 2;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: rgba(243,232,214,.9);
+  }
+
+  footer{
+    text-align:center;
+    padding: 26px;
+    font-size:.8rem;
+    color: var(--ink-soft);
+    background: var(--paper-deep);
+    letter-spacing:.04em;
+  }
+
+  @media (max-width: 768px){
+    nav{ flex-wrap: nowrap; padding: 12px 5vw; }
+    nav ul{
+      display:none;
+      position: absolute;
+      top: 100%; left:0; right:0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--paper-line);
+      box-shadow: var(--shadow);
+      padding: 10px 6vw 18px;
+    }
+    nav ul.open{ display:flex; }
+    nav ul li{ width:100%; }
+    nav ul li a{ display:block; padding: 10px 2px; font-size:.8rem; }
+    .nav-toggle{ display:flex; }
+  }
+
+  @media (max-width: 640px){
+    section{ padding: 60px 6vw 46px; }
+
+    .hero{ min-height: 82vh; padding-top: 60px; }
+    .seal{ --size: 92px; font-size: .85rem; }
+
+    .letter-box{ padding: 34px 24px; }
+    #typingText{ font-size: 1.08rem; min-height: 220px; line-height: 1.85; }
+
+    .slider{ gap: 6px; }
+    .slides{ width: 240px; height: 300px; }
+    .slider button{ width: 34px; height:34px; font-size: .95rem; }
+
+    .cards{ gap: 16px; }
+    .card{ padding: 22px 18px; }
+
+    .timeline-box{ padding-left: 22px; }
+    .event{ padding: 0 0 32px 18px; }
+    .event::before{ left: -33px; font-size:.9rem; width:18px; }
+
+    .gift-box{ width: 108px; height: 108px; font-size: 2.2rem; }
+
+    .buttons{ gap: 12px; }
+    .buttons button{ padding: 12px 24px; font-size: .88rem; }
+  }
+
+  @media (max-width: 400px){
+    .hero-content h3.script{ font-size: 1.5rem; }
+    .hero-content p{ font-size: .95rem; line-height: 1.75; }
+    .seal{ --size: 82px; }
+
+    .letter-box{ padding: 26px 16px; }
+    #typingText{ font-size: 1rem; min-height: 240px; }
+
+    .slides{ width: 200px; height: 320px; }
+
+    .cards{ grid-template-columns: 1fr; }
+
+    .gift-box{ width: 96px; height: 96px; font-size: 1.9rem; }
+    #giftMessage{ font-size: 1.02rem; }
+
+    .buttons{ flex-direction: column; align-items: center; }
+    .buttons button{ width: 100%; max-width: 220px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="petal-field"></div>
+
+<header>
+  <nav>
+    <div class="logo">❦ Forever Us</div>
+    <ul id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#letter">Letter</a></li>
+      <li><a href="#gallery">Memories</a></li>
+      <li><a href="#reasons">Reasons</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#gift">Gift</a></li>
+      <li><a href="#forgive">Forgive?</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="music-btn" id="musicBtn" aria-hidden="true" aria-label="Music is playing">🎵</div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <audio id="bgMusic" loop autoplay playsinline>
+      <source src="love.mp3" type="audio/mpeg">
+    </audio>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h3 class="script">To My Princess</h3>
+    <h1>I Am Truly Sorry...</h1>
+    <p>
+      Every heartbeat reminds me of you.<br>
+      Every sunrise reminds me of your smile.<br>
+      I know I made mistakes. I know I hurt you.<br>
+      But my love was pure for you.
+    </p>
+    <button class="seal" id="startBtn" aria-label="Read the letter"><span>Read</span></button>
+  </div>
+</section>
+
+<div class="torn"></div>
+
+<section class="letter" id="letter">
+  <h2>My Letter To You 💌</h2>
+  <div class="letter-box">
+    <p id="typingText"></p>
+    <div class="signature-line">— Always Yours</div>
+  </div>
+</section>
+
+<div class="torn flip"></div>
+
+<section class="gallery" id="gallery">
+  <h2>Reasons I Fell In Love With You</h2>
+  <div class="slider">
+    <button id="prev" aria-label="Previous">❮</button>
+    <div class="slides">
+      <div class="slide active">
+        <span>😊</span>
+        <h3>Your Smile</h3>
+        <p>Your smile could make even my worst day feel beautiful.</p>
+      </div>
+      <div class="slide">
+        <span>🌸</span>
+        <h3>Your Kindness</h3>
+        <p>I told you that even your presence made me feel safer than ever.</p>
+      </div>
+      <div class="slide">
+        <span>😂</span>
+        <h3>Your Laugh</h3>
+        <p>Hearing you laugh always made me smile without even trying.</p>
+      </div>
+      <div class="slide">
+        <span>❤️</span>
+        <h3>You</h3>
+        <p>You're the most amazing person of my life.</p>
+      </div>
+      <div class="slide">
+        <span>✨</span>
+        <h3>Everything About You</h3>
+        <p>I didn't fall in love with just one thing about you. I fell in love with everything that makes you who you are.</p>
+      </div>
+      <div class="slide">
+        <span>🥹</span>
+        <h3>Us</h3>
+        <p>I hope every memory we've made stays kept safe in our hearts.</p>
+      </div>
+    </div>
+    <button id="next" aria-label="Next">❯</button>
+  </div>
+  <div class="dots" id="dots"></div>
+</section>
+
+<div class="torn"></div>
+
+<section class="reasons" id="reasons">
+  <h2>Reasons Why I Love You</h2>
+  <div class="cards">
+    <div class="card"><h3>Your Smile 😊</h3><p>It can brighten even my darkest day.</p></div>
+    <div class="card"><h3>Your Eyes 👀</h3><p>I could get lost in them forever.</p></div>
+    <div class="card"><h3>Your Kindness 🌸</h3><p>You make everyone around you happier.</p></div>
+    <div class="card"><h3>Your Voice 🎶</h3><p>It's my favorite sound.</p></div>
+    <div class="card"><h3>Your Heart ❤️</h3><p>The most beautiful thing I've ever known.</p></div>
+    <div class="card"><h3>Everything About You 💖</h3><p>You are my favorite person.</p></div>
+  </div>
+</section>
+
+<div class="torn flip"></div>
+
+<section class="timeline" id="timeline">
+  <h2>Our Journey Together</h2>
+  <div class="timeline-box">
+    <div class="event">
+      <span class="chapter">Chapter One</span>
+      <h3>❤️ The Day We Met</h3>
+      <p>The luckiest day of my life.</p>
+    </div>
+    <div class="event">
+      <span class="chapter">Chapter Two</span>
+      <h3>😊 Our First Laugh</h3>
+      <p>The moment I knew I wanted more moments with you.</p>
+    </div>
+    <div class="event">
+      <span class="chapter">Chapter Three</span>
+      <h3>💖 Falling In Love</h3>
+      <p>Without realizing it, I had already given you my heart.</p>
+    </div>
+    <div class="event">
+      <span class="chapter">Chapter Four</span>
+      <h3>🥺 My Mistake</h3>
+      <p>The chapter I wish I could rewrite. A regret that will stay with me.</p>
+    </div>
+    <div class="event">
+      <span class="chapter">Chapter Five</span>
+      <h3>Our New Beginning</h3>
+      <p>Hopefully, you forgive me this time, and our story begins again.</p>
+    </div>
+  </div>
+</section>
+
+<div class="torn"></div>
+
+<section class="gift" id="gift">
+  <h2>A Surprise For You 🎁</h2>
+  <button class="gift-box" id="giftBox" aria-label="Open gift">🎁</button>
+  <p id="giftMessage">Click the gift ❤️</p>
+</section>
+
+<div class="torn flip"></div>
+
+<section class="forgive" id="forgive">
+  <h2>Will You Forgive Me?</h2>
+  <div class="buttons">
+    <button id="forgiveBtn">I Forgive You</button>
+    <button id="escapeBtn">Still Thinking</button>
+  </div>
+  <div id="result"></div>
+</section>
+
+<section class="ending">
+  <h2>No matter what happens...</h2>
+  <p>
+    You will always have a special place in my heart.<br>
+    Thank you for every smile. Thank you for every memory.<br>
+    Thank you for being you.<br><br>
+    I love you. Always. Forever. ❤️
+  </p>
+</section>
+
+<footer>Made with love, just for you, my Junkiri :)</footer>
+
+<script>
+// ---------- mobile nav toggle ----------
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+// ---------- petals ----------
+const petalField = document.getElementById('petal-field');
+const petalChars = ['❦','❧','❤','✿'];
+const petalCount = window.innerWidth < 640 ? 12 : 22;
+for(let i=0;i<petalCount;i++){
+  const p = document.createElement('span');
+  p.className = 'petal';
+  p.textContent = petalChars[Math.floor(Math.random()*petalChars.length)];
+  p.style.left = Math.random()*100 + 'vw';
+  p.style.setProperty('--drift', (Math.random()*80-40) + 'px');
+  p.style.animationDuration = (10 + Math.random()*10) + 's';
+  p.style.animationDelay = (Math.random()*10) + 's';
+  p.style.fontSize = (0.7 + Math.random()*0.9) + 'rem';
+  petalField.appendChild(p);
+}
+
+// ---------- music (autoplay, unstoppable, loops forever) ----------
+const bgMusic = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicBtn');
+bgMusic.loop = true; // repeats automatically once it finishes
+
+// prevent any external code/devtools slip-up from pausing it — snap straight back to playing
+bgMusic.addEventListener('pause', () => {
+  bgMusic.play().catch(() => {});
+});
+
+// try to start music the moment the page opens
+function attemptAutoplay(){
+  const playPromise = bgMusic.play();
+  if(playPromise !== undefined){
+    playPromise.catch(() => {
+      // most browsers block audio with sound until the visitor interacts once —
+      // start it on their very first click/tap/keypress anywhere on the page
+      const startOnFirstTouch = () => {
+        bgMusic.play().catch(()=>{});
+        document.removeEventListener('click', startOnFirstTouch);
+        document.removeEventListener('touchstart', startOnFirstTouch);
+        document.removeEventListener('keydown', startOnFirstTouch);
+      };
+      document.addEventListener('click', startOnFirstTouch, { once: true });
+      document.addEventListener('touchstart', startOnFirstTouch, { once: true });
+      document.addEventListener('keydown', startOnFirstTouch, { once: true });
+    });
+  }
+}
+attemptAutoplay();
+
+// ---------- seal / read button ----------
+document.getElementById('startBtn').addEventListener('click', function(){
+  this.classList.add('crack');
+  setTimeout(() => document.getElementById('letter').scrollIntoView({behavior:'smooth'}), 250);
+});
+
+// ---------- typing letter ----------
+const letterText = `My Love,
+
+I don't know where to begin, except to say I'm sorry — truly, completely sorry.
+
+I've replayed our moments together more times than I can count, and every single one reminds me why you mean so much to me. I know I made mistakes. I know I hurt you when I should have protected your heart instead.
+
+If I could rewrite that chapter, I would. Since I can't, all I can do is promise to be better — more patient, more present, more careful with the most precious thing you've given me: your trust.
+
+You are still the first thing I think of when I wake up, and the last thing on my mind before I sleep. No apology can undo what happened, but I hope this letter is a start.
+
+Forever yours,`;
+
+const typingEl = document.getElementById('typingText');
+let ti = 0;
+function typeLetter(){
+  if(ti <= letterText.length){
+    typingEl.innerHTML = letterText.slice(0, ti) + '<span class="cursor"></span>';
+    ti++;
+    setTimeout(typeLetter, 22);
+  } else {
+    typingEl.innerHTML = letterText;
+  }
+}
+const letterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting && ti === 0){
+      typeLetter();
+      letterObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+letterObserver.observe(document.getElementById('letter'));
+
+// ---------- gallery slider ----------
+const slides = document.querySelectorAll('.slide');
+const dotsWrap = document.getElementById('dots');
+let current = 0;
+slides.forEach((_, i) => {
+  const dot = document.createElement('span');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => goTo(i));
+  dotsWrap.appendChild(dot);
+});
+const dots = document.querySelectorAll('.dot');
+function goTo(i){
+  slides[current].classList.remove('active');
+  dots[current].classList.remove('active');
+  current = (i + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+}
+document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+let autoSlide = setInterval(() => goTo(current + 1), 5000);
+document.querySelector('.slider').addEventListener('mouseenter', () => clearInterval(autoSlide));
+
+// ---------- gift box ----------
+const giftMessages = [
+  "A thousand apologies wrapped in one heart.",
+  "My promise: to love you more carefully than before.",
+  "You are still my favorite person, always.",
+  "A little more patience, a lot more love — that's the gift."
+];
+let giftOpened = false;
+document.getElementById('giftBox').addEventListener('click', function(){
+  giftOpened = !giftOpened;
+  const msg = document.getElementById('giftMessage');
+  if(giftOpened){
+    this.textContent = '💖';
+    msg.textContent = giftMessages[Math.floor(Math.random()*giftMessages.length)];
+  } else {
+    this.textContent = '🎁';
+    msg.textContent = 'Click the gift ❤️';
+  }
+});
+
+// ---------- forgive ----------
+const escapeBtn = document.getElementById('escapeBtn');
+const forgiveBtn = document.getElementById('forgiveBtn');
+const result = document.getElementById('result');
+const buttonsWrap = escapeBtn.parentElement;
+
+buttonsWrap.style.position = 'relative';
+escapeBtn.style.position = 'relative';
+escapeBtn.style.transition = 'left .18s ease, top .18s ease';
+
+function dodgeAway(){
+  const wrap = buttonsWrap.getBoundingClientRect();
+  const maxX = Math.max(wrap.width - escapeBtn.offsetWidth - 10, 40);
+  const maxY = 50;
+  escapeBtn.style.left = (Math.random()*maxX - maxX/2) + 'px';
+  escapeBtn.style.top = (Math.random()*maxY - maxY/2) + 'px';
+}
+
+// runs away the moment a pointer gets near it — mouse hover, touch, or focus —
+// so it can never actually be pressed
+['mouseenter', 'pointerenter', 'pointerdown', 'touchstart', 'focus'].forEach(evt => {
+  escapeBtn.addEventListener(evt, (e) => {
+    e.preventDefault();
+    dodgeAway();
+  }, { passive: false });
+});
+// belt-and-suspenders: if a click ever somehow lands, dodge instead of responding
+escapeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  dodgeAway();
+});
+// keyboard users tabbing to it get moved along too, so it stays untouchable
+escapeBtn.setAttribute('tabindex', '-1');
+escapeBtn.setAttribute('aria-hidden', 'true');
+
+forgiveBtn.addEventListener('click', () => {
+  result.textContent = "Thank you... this means everything to me. ❤️";
+});
+</script>
+</body>
+</html>
