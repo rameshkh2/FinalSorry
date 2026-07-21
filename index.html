@@ -117,6 +117,59 @@
     padding: 90px 8vw 70px;
   }
 
+  /* ---------- intro gate ---------- */
+  #introGate{
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 24px;
+    background:
+      radial-gradient(ellipse at top, rgba(180,137,63,.12), transparent 60%),
+      var(--paper);
+    transition: opacity .7s ease, visibility .7s ease;
+  }
+  #introGate.hidden{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  body.locked{ overflow: hidden; }
+  .intro-content{ max-width: 420px; }
+  .intro-content h3.script{ font-size: 1.8rem; margin-bottom: .15em; }
+  .intro-content h1{
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-style: italic;
+  }
+  .intro-content p{
+    color: var(--ink-soft);
+    line-height: 1.8;
+    font-size: .98rem;
+    margin: 16px auto 30px;
+  }
+  .explore-btn{
+    display:inline-flex;
+    align-items:center;
+    gap: 10px;
+    padding: 16px 36px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    letter-spacing: .03em;
+    color: var(--paper);
+    background: radial-gradient(circle at 30% 30%, #9c3247, var(--maroon) 55%, var(--maroon-deep) 100%);
+    box-shadow: 0 10px 24px rgba(89,24,38,.45), inset 0 0 0 2px rgba(243,232,214,.25);
+    transition: transform .3s ease;
+  }
+  .explore-btn:hover{ transform: scale(1.05); }
+  .explore-btn:active{ transform: scale(.97); }
+
   /* ---------- header / nav ---------- */
   header{
     position: sticky;
@@ -565,7 +618,16 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<div id="introGate">
+  <div class="intro-content">
+    <h3 class="script">To My Princess</h3>
+    <h1>Something I Need You To See...</h1>
+    <p>Before anything else, just click below — the rest is for you.</p>
+    <button class="explore-btn" id="exploreBtn">❦ Explore</button>
+  </div>
+</div>
 
 <div id="petal-field"></div>
 
@@ -739,6 +801,15 @@
 <footer>Made with love, just for you, my Junkiri :)</footer>
 
 <script>
+// ---------- intro gate: Explore reveals the site and starts the music ----------
+const introGate = document.getElementById('introGate');
+const exploreBtn = document.getElementById('exploreBtn');
+exploreBtn.addEventListener('click', () => {
+  bgMusic.play().catch(() => {}); // a real click = a genuine user gesture, so this is allowed to succeed
+  introGate.classList.add('hidden');
+  document.body.classList.remove('locked');
+});
+
 // ---------- mobile nav toggle ----------
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
@@ -771,36 +842,15 @@ for(let i=0;i<petalCount;i++){
   petalField.appendChild(p);
 }
 
-// ---------- music (autoplay, unstoppable, loops forever) ----------
+// ---------- music (starts on Explore, unstoppable, loops forever) ----------
 const bgMusic = document.getElementById('bgMusic');
-const musicBtn = document.getElementById('musicBtn');
 bgMusic.loop = true; // repeats automatically once it finishes
 
 // prevent any external code/devtools slip-up from pausing it — snap straight back to playing
 bgMusic.addEventListener('pause', () => {
+  if(!introGate.classList.contains('hidden')) return; // don't fight the gate before Explore is clicked
   bgMusic.play().catch(() => {});
 });
-
-// try to start music the moment the page opens
-function attemptAutoplay(){
-  const playPromise = bgMusic.play();
-  if(playPromise !== undefined){
-    playPromise.catch(() => {
-      // most browsers block audio with sound until the visitor interacts once —
-      // start it on their very first click/tap/keypress anywhere on the page
-      const startOnFirstTouch = () => {
-        bgMusic.play().catch(()=>{});
-        document.removeEventListener('click', startOnFirstTouch);
-        document.removeEventListener('touchstart', startOnFirstTouch);
-        document.removeEventListener('keydown', startOnFirstTouch);
-      };
-      document.addEventListener('click', startOnFirstTouch, { once: true });
-      document.addEventListener('touchstart', startOnFirstTouch, { once: true });
-      document.addEventListener('keydown', startOnFirstTouch, { once: true });
-    });
-  }
-}
-attemptAutoplay();
 
 // ---------- seal / read button ----------
 document.getElementById('startBtn').addEventListener('click', function(){
